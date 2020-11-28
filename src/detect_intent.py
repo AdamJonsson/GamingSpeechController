@@ -50,4 +50,4 @@ def detect_intent_from_speech(microphone_stream):
     print('Fulfillment text: {}\n'.format(
         query_result.fulfillment_text))
 
-    return query_result.intent.display_name
+    return query_result.intent.display_name, query_result.parameters
