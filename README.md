@@ -13,5 +13,6 @@
   * May not be required: "Test the SDK and authentication"
   * **DO NOT** skip "Install the Dialogflow client library"
 * Install the following packages
-  * `pip install SpeechRecognition`
+  * `pip install PyAudio`
+    * The installation failed for me. Needed to do the following: https://stackoverflow.com/a/55630212
 * Done
