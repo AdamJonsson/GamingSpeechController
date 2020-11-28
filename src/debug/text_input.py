@@ -1,9 +1,9 @@
+from ..microphone import microphone
 from ..agent import agent;
-import dialogflow
+import dialogflow_v2 as dialogflow
 from google.api_core.exceptions import InvalidArgument
 
 def debug_text_input():
-
     while True:
         text_to_be_analyzed = input("Input: ")
 
@@ -24,4 +24,5 @@ def debug_text_input():
             response.query_result.intent_detection_confidence)
         print("Fulfillment text:", response.query_result.fulfillment_text)
         print("Quit: ctrl + c")
-        print("------------------------")
+        print(20 * "=")
+

@@ -12,4 +12,6 @@
   * May not be required: "Install and initialize the Cloud SDK"
   * May not be required: "Test the SDK and authentication"
   * **DO NOT** skip "Install the Dialogflow client library"
+* Install the following packages
+  * `pip install SpeechRecognition`
 * Done
