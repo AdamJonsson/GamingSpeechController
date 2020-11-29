@@ -4,9 +4,9 @@ class _Microphone:
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
     RATE = 44100
-    _current_chosen_channel = 1
+    _currentChosenChannel = 1
 
-    def list_microphone_channels(self):
+    def listMicrophoneChannels(self):
         pyaudio_object = pyaudio.PyAudio()
         info = pyaudio_object.get_host_api_info_by_index(0)
         number_of_devices = info.get('deviceCount')
@@ -15,18 +15,18 @@ class _Microphone:
             if (device.get('maxInputChannels')) > 0:
                 print (i, "-",  device.get("name"))
 
-    def ask_user_for_input_device(self):
-        self.list_microphone_channels()
-        new_input_device_channel = int(input("Choose a input device: "))
-        self.change_input_device(new_input_device_channel)
+    def askUserForInputDevice(self):
+        self.listMicrophoneChannels()
+        newInputDeviceChannel = int(input("Choose a input device: "))
+        self.changeInputDevice(newInputDeviceChannel)
 
-    def change_input_device(self, new_channel):
-        self._current_chosen_channel = new_channel
+    def changeInputDevice(self, new_channel):
+        self._currentChosenChannel = new_channel
 
-    def get_microphone_stream(self):
+    def getMicrophoneStream(self):
         pyaudio_object = pyaudio.PyAudio()
         stream = pyaudio_object.open(format=self.FORMAT,
-                        channels=self._current_chosen_channel,
+                        channels=self._currentChosenChannel,
                         rate=self.RATE,
                         input=True,
                         frames_per_buffer=self.CHUNK)
