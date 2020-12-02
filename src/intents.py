@@ -11,4 +11,13 @@ class Intents:
     RIGHT = "Right"
     GO = "Go"
     NO = "No"
-    QUIT = "Quit"
+    QUIT = "Quit",
+    CHOOSE_PKMN = "Pokemon, I choose you!"
+    SUMMARY = "Show summary for Pokemon"
+    CHANGE_PAGE = "Change page"
+    ATTACK = "Attack"
+
+class Entities:
+    NEXT = "Next"
+    PREVIOUS = "Previous"
+
