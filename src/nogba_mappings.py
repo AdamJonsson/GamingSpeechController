@@ -32,11 +32,7 @@ class AttackIndex:
 
 class PokemonActions:
     def __init__(self): 
-        self.pkmnOrder = [
-            Pokémon.CHARMANDER,
-            Pokémon.SPEAROW,
-            Pokémon.CATERPIE
-        ]
+        self.resetPkmnOrder()
         self.attacks = {
             "Scratch": 0,
             "Peck": 0,
@@ -48,7 +44,15 @@ class PokemonActions:
             "Metal claw": 3
         }
 
+    def resetPkmnOrder(self):
+        self.pkmnOrder = [
+            Pokémon.CHARMANDER,
+            Pokémon.SPEAROW,
+            Pokémon.CATERPIE
+        ]
+
     def walk(self, direction, steps):
+        self.resetPkmnOrder()
         key = NoGbaMappings.UP
         if direction == Intents.UP:
             key = NoGbaMappings.UP

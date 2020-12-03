@@ -13,7 +13,7 @@ def get_microphone_stream():
 
 def getParameter(parameters, attr="", integer=False):
     if integer: 
-        return parameters.fields["number-integer"].list_value.values[0].number_value
+        return int(parameters.fields["number-integer"].list_value.values[0].number_value)
     return parameters.fields[attr].string_value.strip()
 
 def main():
