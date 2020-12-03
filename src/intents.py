@@ -1,6 +1,9 @@
 class Intents:
     RUN = "Run"
     FIGHT = "Fight"
+    BAG = "Bag"
+    POTION = "Potion"
+    ANTIDOTE = "Antidote"
     UNKNOWN = "Unknown"
     BACK = "Back"
     START = "Start"
@@ -12,6 +15,7 @@ class Intents:
     GO = "Go"
     NO = "No"
     QUIT = "Quit",
+    SELECT_PKMN = "PokemonSelect"
     CHOOSE_PKMN = "Pokemon, I choose you!"
     SUMMARY = "Show summary for Pokemon"
     CHANGE_PAGE = "Change page"
