@@ -13,9 +13,11 @@ def get_microphone_stream():
     microphone.askUserForInputDevice()
     return microphone.getMicrophoneStream()
 
-def getParameter(parameters, attr="", integer=False):
+def getParameter(parameters, attr="", listValue=-1, integer=False):
     if integer: 
         return int(parameters.fields["number-integer"].list_value.values[0].number_value)
+    elif listValue > -1:
+        return parameters.fields[attr].list_value.values[listValue].string_value.strip()
     return parameters.fields[attr].string_value.strip()
 
 def main():
@@ -96,7 +98,7 @@ def main():
                 pkmnActions.changePage(way)
 
             elif intent == Intents.ATTACK:
-                attack = getParameter(parameters, "Attack")
+                attack = getParameter(parameters, "Attack", listValue=0)
                 pkmnActions.useAttack(attack)
 
             elif intent == Intents.QUIT:

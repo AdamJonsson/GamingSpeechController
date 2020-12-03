@@ -10,16 +10,6 @@ class Pokémon:
     SPEAROW = 'Spearow'
     CATERPIE = 'Caterpie'
 
-class AttackIndex:
-    SCRATCH = 0
-    PECK = 0
-    TACKLE = 0
-    GROWL = 1
-    STRING_SHOT = 1
-    EMBER = 2
-    LEER = 2
-    METAL_CLAW = 3
-
 class PokemonActions:
     def __init__(self): 
         self.resetPkmnOrder()
