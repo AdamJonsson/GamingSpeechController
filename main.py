@@ -33,7 +33,7 @@ def main():
 
             elif intent == Intents.BACK:
                 pressReleaseKey(NoGbaMappings.B)
-                bagActions.markBagAsClosed()
+                bagActions.handleBackActionForBag()
 
             elif intent == Intents.UP:
                 pressReleaseKey(NoGbaMappings.UP)
