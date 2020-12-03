@@ -41,7 +41,7 @@ class BagActions:
         if (pokemon != None):
             self.applyConsumableOnPokemon(pokemon)
         else:
-            self.awaitPokemonSelect = True;
+            self.awaitPokemonSelect = True
 
     def useAntidote(self, pokemon):
         if (self.bagIsOpen == False):
@@ -53,7 +53,7 @@ class BagActions:
         if (pokemon != None):
             self.applyConsumableOnPokemon(pokemon)
         else:
-            self.awaitPokemonSelect = True;
+            self.awaitPokemonSelect = True
 
 
     def applyConsumableOnPokemon(self, pokemon):
@@ -61,4 +61,5 @@ class BagActions:
         self.pkmnActions.selectPkmnFromMenu(pokemon)
         sleep(3)
         Helpers.goBackToMainMenuState(backActionDelay = 1)
-        self.awaitPokemonSelect = False;
+        self.awaitPokemonSelect = False
+        self.bagIsOpen = False
