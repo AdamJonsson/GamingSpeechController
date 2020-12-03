@@ -16,7 +16,7 @@ class AttackIndex:
     TACKLE = 0
     GROWL = 1
     STRING_SHOT = 1
-    EMBER = 1
+    EMBER = 2
     LEER = 2
     METAL_CLAW = 3
 
