@@ -1,11 +1,12 @@
 
+from src.pokemon_mappings import PokemonActions
 from src.debug.text_input import debug_text_input
 from src.microphone import microphone
 from src.detect_intent import detectIntentFromSpeech
 from src.intents import Intents
 
 from src.keystrokes import pressReleaseKey
-from src.nogba_mappings import NoGbaMappings, PokemonActions
+from src.nogba_mappings import NoGbaMappings
 
 def get_microphone_stream():
     microphone.askUserForInputDevice()
@@ -49,6 +50,7 @@ def main():
                 print("Fight keyaction")
             elif intent == Intents.CHOOSE_PKMN:
                 chosen = getParameter(parameters, "Pokemon")
+                print(chosen)
                 if(chosen in pkmnActions.pkmnOrder):
                     pkmnActions.switchPkmn(chosen)  
             elif intent == Intents.SUMMARY:
