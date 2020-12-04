@@ -10,16 +10,6 @@ class Pokémon:
     SPEAROW = 'Spearow'
     CATERPIE = 'Caterpie'
 
-class AttackIndex:
-    SCRATCH = 0
-    PECK = 0
-    TACKLE = 0
-    GROWL = 1
-    STRING_SHOT = 1
-    EMBER = 2
-    LEER = 2
-    METAL_CLAW = 3
-
 class PokemonActions:
     def __init__(self): 
         self.resetPkmnOrder()
@@ -29,7 +19,7 @@ class PokemonActions:
             "Tackle": 0,
             "Growl": 1,
             "String shot": 1,
-            "Ember": 1,
+            "Ember": 2,
             "Leer": 2,
             "Metal claw": 3
         }
@@ -59,15 +49,18 @@ class PokemonActions:
         pressReleaseKey(NoGbaMappings.DOWN)
         pressReleaseKey(NoGbaMappings.A)
 
-    def selectPkmn(self, chosen):
-        Helpers.goBackToMainMenuState()
-        pressReleaseKey(NoGbaMappings.DOWN)
-        pressReleaseKey(NoGbaMappings.A, sleep=1.5)
+    def selectPkmnFromMenu(self, chosen):
         chosenIndex = self.pkmnOrder.index(chosen)
         for i in range(0, chosenIndex):
             pressReleaseKey(NoGbaMappings.DOWN, sleep=0.2)
         pressReleaseKey(NoGbaMappings.A, sleep=0.2)
         return chosenIndex
+
+    def selectPkmn(self, chosen):
+        Helpers.goBackToMainMenuState()
+        pressReleaseKey(NoGbaMappings.DOWN)
+        pressReleaseKey(NoGbaMappings.A, sleep=1.5)
+        return self.selectPkmnFromMenu(chosen)
 
     def switchPkmn(self, chosen):
         chosenIndex = self.selectPkmn(chosen)
