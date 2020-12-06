@@ -65,7 +65,7 @@ def _findShortcutIntent(transcript):
         intent is found, None is returned
     """
     
-    goShortcut = ["ok", "okay", "next"];
+    goShortcut = ["ok", "okay", "continue"];
     if transcript in goShortcut:
         return Intents.GO
 
