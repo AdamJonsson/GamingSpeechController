@@ -2,8 +2,9 @@ import dialogflow_v2 as dialogflow
 from .agent import agent;
 from .microphone import microphone
 from .intents import Intents
+from .intents import Intents
 
-def detectIntentFromSpeech(microphoneStream):
+def detectIntentFromSpeech(microphoneStream, disabledShortcuts=[]):
     audioEncoding = dialogflow.enums.AudioEncoding.AUDIO_ENCODING_LINEAR_16
     sample_rate_hertz = microphone.RATE
 
@@ -39,7 +40,7 @@ def detectIntentFromSpeech(microphoneStream):
         transcript = response.recognition_result.transcript
 
         print('Intermediate transcript: "{}".'.format(transcript))
-        shortcutIntent = _findShortcutIntent(transcript)
+        shortcutIntent = _findShortcutIntent(transcript, disabledShortcuts)
         if shortcutIntent:
             return shortcutIntent, None
 
@@ -58,15 +59,20 @@ def detectIntentFromSpeech(microphoneStream):
     return queryResult.intent.display_name, queryResult.parameters
 
 
-def _findShortcutIntent(transcript):
+def _findShortcutIntent(transcript, disabledShortcuts=[]):
     """
         Only short and commands that do not overlap with other 
         more longer commands should be added here. If no shortcut
         intent is found, None is returned
     """
     
-    goShortcut = ["ok", "okay", "continue"]
+    goShortcut = ["ok", "okay", "continue", "next"]
     backShortcut = ["back"]
+
+    for shortcut in goShortcut:
+        if shortcut in disabledShortcuts:
+            goShortcut.remove(shortcut)
+    
     if transcript in goShortcut:
         return Intents.GO
     elif transcript in backShortcut:
