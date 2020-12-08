@@ -98,6 +98,18 @@ class PokemonActions:
             pressReleaseKey(NoGbaMappings.DOWN, sleep=0.2)
             pressReleaseKey(NoGbaMappings.A)
 
+    def fight(self):
+        Helpers.goBackToMainMenuState()
+        pressReleaseKey(NoGbaMappings.A)
 
+    def viewPkmn(self):
+        Helpers.goBackToMainMenuState()
+        pressReleaseKey(NoGbaMappings.DOWN, sleep=0.2)  
+        pressReleaseKey(NoGbaMappings.A)
 
+    def run(self):
+        Helpers.goBackToMainMenuState()
+        pressReleaseKey(NoGbaMappings.RIGHT, sleep=0.2)
+        pressReleaseKey(NoGbaMappings.DOWN, sleep=0.2)  
+        pressReleaseKey(NoGbaMappings.A)
 

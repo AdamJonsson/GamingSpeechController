@@ -67,9 +67,12 @@ def _findShortcutIntent(transcript):
     
     goShortcut = ["ok", "okay", "continue"]
     backShortcut = ["back"]
+    fightShortcut = ["fight"]
     if transcript in goShortcut:
         return Intents.GO
     elif transcript in backShortcut:
         return Intents.BACK
+    elif transcript in fightShortcut:
+        return Intents.FIGHT
 
     return None
