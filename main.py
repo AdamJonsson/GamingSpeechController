@@ -50,7 +50,7 @@ class GamingSpeechController:
 
         print(20 * "=")
         print("Listening for user action...")
-        intent, parameters = detectIntentFromSpeech(self.microphoneStream, self.speechGUI)
+        intent, parameters = detectIntentFromSpeech(self.microphoneStream, self.speechGUI, self.pkmnActions.disabledShortcuts)
 
         self.speechGUI.updateHistoryText()
         if intent != Intents.UNKNOWN:
@@ -61,9 +61,11 @@ class GamingSpeechController:
         try: 
             if intent == Intents.GO:
                 pressReleaseKey(NoGbaMappings.A)
+                self.pkmnActions.removeDisabledShortcut("next")
 
             elif intent == Intents.BACK:
                 pressReleaseKey(NoGbaMappings.B)
+                self.pkmnActions.removeDisabledShortcut("next")
                 self.bagActions.handleBackActionForBag()
 
             elif intent == Intents.UP:
@@ -78,9 +80,6 @@ class GamingSpeechController:
             elif intent == Intents.RIGHT:
                 pressReleaseKey(NoGbaMappings.RIGHT)
 
-            elif intent == Intents.START:
-                pressReleaseKey(NoGbaMappings.START)
-
             elif intent == Intents.NO:
                 self.pkmnActions.answerNo()
 
@@ -90,10 +89,16 @@ class GamingSpeechController:
                 self.pkmnActions.walk(direction, steps)
 
             elif intent == Intents.FIGHT:
-                print("Fight keyaction")
+                self.pkmnActions.fight()
 
             elif intent == Intents.BAG:
                 self.bagActions.openBag()
+
+            elif intent == Intents.POKEMON:
+                self.pkmnActions.viewPkmn()
+
+            elif intent == Intents.RUN:
+                self.pkmnActions.run()
 
             elif intent == Intents.POTION or intent == Intents.ANTIDOTE:
                 chosen = self._getParameter(parameters, "Pokemon")
