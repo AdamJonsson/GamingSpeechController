@@ -1,4 +1,5 @@
 
+import time
 from src.speech_gui import SpeechGUI
 from src.bag_mappings import BagActions
 from src.pokemon_mappings import PokemonActions
@@ -50,6 +51,12 @@ class GamingSpeechController:
         print(20 * "=")
         print("Listening for user action...")
         intent, parameters = detectIntentFromSpeech(self.microphoneStream, self.speechGUI)
+
+        self.speechGUI.updateHistoryText()
+        if intent != Intents.UNKNOWN:
+            self.speechGUI.toggleExecutingCommandView(on=True)
+        else:
+            self.speechGUI.showNoIntentFoundStatus()
 
         try: 
             if intent == Intents.GO:
@@ -131,6 +138,7 @@ class GamingSpeechController:
         except Exception as error:
                 print(error)     
 
+        self.speechGUI.toggleExecutingCommandView(on=False)
         self._checkForIntent();  
 
 
