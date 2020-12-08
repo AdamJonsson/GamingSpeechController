@@ -51,9 +51,6 @@ def main():
             elif intent == Intents.RIGHT:
                 pressReleaseKey(NoGbaMappings.RIGHT)
 
-            elif intent == Intents.START:
-                pressReleaseKey(NoGbaMappings.START)
-
             elif intent == Intents.NO:
                 pkmnActions.answerNo()
 
@@ -63,10 +60,16 @@ def main():
                 pkmnActions.walk(direction, steps)
 
             elif intent == Intents.FIGHT:
-                print("Fight keyaction")
+                pkmnActions.fight()
 
             elif intent == Intents.BAG:
                 bagActions.openBag()
+
+            elif intent == Intents.POKEMON:
+                pkmnActions.viewPkmn()
+
+            elif intent == Intents.RUN:
+                pkmnActions.run()
 
             elif intent == Intents.POTION or intent == Intents.ANTIDOTE:
                 chosen = getParameter(parameters, "Pokemon")

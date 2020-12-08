@@ -1,7 +1,8 @@
 class Intents:
-    RUN = "Run"
     FIGHT = "Fight"
     BAG = "Bag"
+    RUN = "Run"
+    POKEMON = "Pokemon"
     POTION = "Potion"
     ANTIDOTE = "Antidote"
     UNKNOWN = "Unknown"

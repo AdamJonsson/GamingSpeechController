@@ -68,6 +68,7 @@ def _findShortcutIntent(transcript, disabledShortcuts=[]):
     
     goShortcut = ["ok", "okay", "continue", "next"]
     backShortcut = ["back"]
+    fightShortcut = ["fight"]
 
     for shortcut in goShortcut:
         if shortcut in disabledShortcuts:
@@ -77,5 +78,7 @@ def _findShortcutIntent(transcript, disabledShortcuts=[]):
         return Intents.GO
     elif transcript in backShortcut:
         return Intents.BACK
+    elif transcript in fightShortcut:
+        return Intents.FIGHT
 
     return None
