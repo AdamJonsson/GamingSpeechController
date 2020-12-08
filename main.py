@@ -27,14 +27,16 @@ def main():
     while True:
         print(20 * "=")
         print("Listening for user action...")
-        intent, parameters = detectIntentFromSpeech(microphone_stream)
+        intent, parameters = detectIntentFromSpeech(microphone_stream, pkmnActions.disabledShortcuts)
 
         try: 
             if intent == Intents.GO:
                 pressReleaseKey(NoGbaMappings.A)
+                pkmnActions.removeDisabledShortcut("next")
 
             elif intent == Intents.BACK:
                 pressReleaseKey(NoGbaMappings.B)
+                pkmnActions.removeDisabledShortcut("next")
                 bagActions.handleBackActionForBag()
 
             elif intent == Intents.UP:

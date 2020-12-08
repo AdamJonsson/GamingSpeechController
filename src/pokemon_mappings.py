@@ -13,6 +13,7 @@ class Pokémon:
 class PokemonActions:
     def __init__(self): 
         self.resetPkmnOrder()
+        self.disabledShortcuts = []
         self.attacks = {
             "Scratch": 0,
             "Peck": 0,
@@ -30,6 +31,14 @@ class PokemonActions:
             Pokémon.SPEAROW,
             Pokémon.CATERPIE
         ]
+
+    def addDisabledShortcut(self, shortcut):
+        if shortcut not in self.disabledShortcuts:
+            self.disabledShortcuts.append(shortcut)
+
+    def removeDisabledShortcut(self, shortcut):
+        if shortcut in self.disabledShortcuts:
+            self.disabledShortcuts.remove(shortcut)
 
     def walk(self, direction, steps):
         self.resetPkmnOrder()
@@ -72,6 +81,7 @@ class PokemonActions:
         pressReleaseKey(NoGbaMappings.DOWN, sleep=0.2)
         pressReleaseKey(NoGbaMappings.A, sleep=0.2)
         pressReleaseKey(NoGbaMappings.A)
+        self.addDisabledShortcut("next")
 
     def changePage(self, way):
         if way == Entities.NEXT:
