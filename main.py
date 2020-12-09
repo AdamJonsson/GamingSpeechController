@@ -1,4 +1,6 @@
 
+import time
+from src.speech_gui import SpeechGUI
 from src.bag_mappings import BagActions
 from src.pokemon_mappings import PokemonActions
 from src.debug.text_input import debug_text_input
@@ -9,35 +11,62 @@ from src.intents import Intents
 from src.keystrokes import pressReleaseKey
 from src.nogba_mappings import NoGbaMappings
 
-def get_microphone_stream():
-    microphone.askUserForInputDevice()
-    return microphone.getMicrophoneStream()
+import tkinter as tk
+from threading import Thread 
 
-def getParameter(parameters, attr="", listValue=-1, integer=False):
-    if integer: 
-        return int(parameters.fields["number-integer"].list_value.values[0].number_value)
-    elif listValue > -1:
-        return parameters.fields[attr].list_value.values[listValue].string_value.strip()
-    return parameters.fields[attr].string_value.strip()
+class GamingSpeechController:
 
-def main():
-    microphone_stream = get_microphone_stream()
-    pkmnActions = PokemonActions()
-    bagActions = BagActions(pkmnActions)
-    while True:
+    def __init__(self) -> None:
+        self.pkmnActions = PokemonActions()
+        self.bagActions = BagActions(self.pkmnActions)
+        self.microphoneStream = self._getMicrophoneStream()
+        self._quitRequest = False;
+
+    def quit(self):
+        self._quitRequest = True
+        self.speechGUI.quit()
+
+    def start(self):
+        self.speechGUI = SpeechGUI()
+        self.control_thread = Thread(target=self._checkForIntent, daemon=True)
+        self.control_thread.start()
+        self.speechGUI.start(onExitCallback=self.quit)
+        self.control_thread.join()
+
+    def _getMicrophoneStream(self):
+        microphone.askUserForInputDevice()
+        return microphone.getMicrophoneStream()
+
+    def _getParameter(self, parameters, attr="", listValue=-1, integer=False):
+        if integer: 
+            return int(parameters.fields["number-integer"].list_value.values[0].number_value)
+        elif listValue > -1:
+            return parameters.fields[attr].list_value.values[listValue].string_value.strip()
+        return parameters.fields[attr].string_value.strip()
+
+    def _checkForIntent(self):
+        if self._quitRequest:
+            return
+
         print(20 * "=")
         print("Listening for user action...")
-        intent, parameters = detectIntentFromSpeech(microphone_stream, pkmnActions.disabledShortcuts)
+        intent, parameters = detectIntentFromSpeech(self.microphoneStream, self.speechGUI, self.pkmnActions.disabledShortcuts)
+
+        self.speechGUI.updateHistoryText()
+        if intent != Intents.UNKNOWN:
+            self.speechGUI.toggleExecutingCommandView(on=True)
+        else:
+            self.speechGUI.showNoIntentFoundStatus()
 
         try: 
             if intent == Intents.GO:
                 pressReleaseKey(NoGbaMappings.A)
-                pkmnActions.removeDisabledShortcut("next")
+                self.pkmnActions.removeDisabledShortcut("next")
 
             elif intent == Intents.BACK:
                 pressReleaseKey(NoGbaMappings.B)
-                pkmnActions.removeDisabledShortcut("next")
-                bagActions.handleBackActionForBag()
+                self.pkmnActions.removeDisabledShortcut("next")
+                self.bagActions.handleBackActionForBag()
 
             elif intent == Intents.UP:
                 pressReleaseKey(NoGbaMappings.UP)
@@ -52,67 +81,76 @@ def main():
                 pressReleaseKey(NoGbaMappings.RIGHT)
 
             elif intent == Intents.NO:
-                pkmnActions.answerNo()
+                self.pkmnActions.answerNo()
 
             elif intent == Intents.DIR_N_STEPS:
-                direction =  getParameter(parameters, "Direction")
-                steps = getParameter(parameters, integer=True)
-                pkmnActions.walk(direction, steps)
+                direction =  self._getParameter(parameters, "Direction")
+                steps = self._getParameter(parameters, integer=True)
+                self.pkmnActions.walk(direction, steps)
 
             elif intent == Intents.FIGHT:
-                pkmnActions.fight()
+                self.pkmnActions.fight()
 
             elif intent == Intents.BAG:
-                bagActions.openBag()
+                self.bagActions.openBag()
 
             elif intent == Intents.POKEMON:
-                pkmnActions.viewPkmn()
+                self.pkmnActions.viewPkmn()
 
             elif intent == Intents.RUN:
-                pkmnActions.run()
+                self.pkmnActions.run()
 
             elif intent == Intents.POTION or intent == Intents.ANTIDOTE:
-                chosen = getParameter(parameters, "Pokemon")
+                chosen = self._getParameter(parameters, "Pokemon")
                 chosenPokemon = None
-                if (chosen in pkmnActions.pkmnOrder):
+                if (chosen in self.pkmnActions.pkmnOrder):
                     chosenPokemon = chosen
                 
                 if (intent == Intents.POTION):
-                    bagActions.usePotion(chosenPokemon)
+                    self.bagActions.usePotion(chosenPokemon)
                 if (intent == Intents.ANTIDOTE):
-                    bagActions.useAntidote(chosenPokemon)
+                    self.bagActions.useAntidote(chosenPokemon)
 
             elif intent == Intents.SELECT_PKMN:
-                chosen = getParameter(parameters, "Pokemon")
-                if(chosen in pkmnActions.pkmnOrder):
-                    if (bagActions.awaitPokemonSelect):
-                        bagActions.applyConsumableOnPokemon(chosen)
+                chosen = self._getParameter(parameters, "Pokemon")
+                if(chosen in self.pkmnActions.pkmnOrder):
+                    if (self.bagActions.awaitPokemonSelect):
+                        self.bagActions.applyConsumableOnPokemon(chosen)
 
             elif intent == Intents.CHOOSE_PKMN:
-                chosen = getParameter(parameters, "Pokemon")
-                if(chosen in pkmnActions.pkmnOrder):
-                    pkmnActions.switchPkmn(chosen)  
+                chosen = self._getParameter(parameters, "Pokemon")
+                if(chosen in self.pkmnActions.pkmnOrder):
+                    self.pkmnActions.switchPkmn(chosen)  
 
             elif intent == Intents.SUMMARY:
-                chosen = getParameter(parameters, "Pokemon")
-                if(chosen in pkmnActions.pkmnOrder):
-                    pkmnActions.viewPkmnSummary(chosen)
+                chosen = self._getParameter(parameters, "Pokemon")
+                if(chosen in self.pkmnActions.pkmnOrder):
+                    self.pkmnActions.viewPkmnSummary(chosen)
 
             elif intent == Intents.CHANGE_PAGE:
-                way = getParameter(parameters, "Way")
-                pkmnActions.changePage(way)
+                way = self._getParameter(parameters, "Way")
+                self.pkmnActions.changePage(way)
 
             elif intent == Intents.ATTACK:
-                attack = getParameter(parameters, "Attack", listValue=0)
-                pkmnActions.useAttack(attack)
+                attack = self._getParameter(parameters, "Attack", listValue=0)
+                self.pkmnActions.useAttack(attack)
 
             elif intent == Intents.QUIT:
-                break
+                return;
 
             else:
                 print("No keyaction")
         except Exception as error:
-                print(error)          
+                print(error)     
+
+        self.speechGUI.toggleExecutingCommandView(on=False)
+        self._checkForIntent();  
+
+
+def main():
+    gamingSpeechController = GamingSpeechController()
+    gamingSpeechController.start()
+           
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,12 @@
 import dialogflow_v2 as dialogflow
+
+from .speech_gui import SpeechGUI
 from .agent import agent;
 from .microphone import microphone
 from .intents import Intents
 from .intents import Intents
 
-def detectIntentFromSpeech(microphoneStream, disabledShortcuts=[]):
+def detectIntentFromSpeech(microphoneStream, speechGUI: SpeechGUI, disabledShortcuts=[]):
     audioEncoding = dialogflow.enums.AudioEncoding.AUDIO_ENCODING_LINEAR_16
     sample_rate_hertz = microphone.RATE
 
@@ -40,6 +42,7 @@ def detectIntentFromSpeech(microphoneStream, disabledShortcuts=[]):
         transcript = response.recognition_result.transcript
 
         print('Intermediate transcript: "{}".'.format(transcript))
+        speechGUI.changeText(transcript)
         shortcutIntent = _findShortcutIntent(transcript, disabledShortcuts)
         if shortcutIntent:
             return shortcutIntent, None
